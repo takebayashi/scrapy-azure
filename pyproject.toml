@@ -1,0 +1,51 @@
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[project]
+name = "scrapy-azure"
+dynamic = ["version"]
+description = "A Scrapy extension to integrate with Microsoft Azure services"
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MIT"
+keywords = []
+authors = [
+  { name = "Shun Takebayashi" },
+]
+classifiers = [
+  "Framework :: Scrapy",
+]
+dependencies = [
+  "scrapy",
+  "azure-identity",
+  "azure-storage-blob",
+]
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.envs.default]
+dependencies = [
+  "black",
+  "isort",
+  "mypy",
+  "ruff",
+  "pytest",
+]
+
+[tool.hatch.envs.default.scripts]
+format = "black . && isort ."
+lint = "black --check . && isort --check . && mypy . && ruff check ."
+test = "pytest"
+
+[tool.black]
+
+[tool.isort]
+profile = "black"
+
+[tool.mypy]
+ignore_missing_imports = true
+
+[tool.ruff.lint]
+select = ["F"]
