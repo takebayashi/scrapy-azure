@@ -1,3 +1,4 @@
+import logging
 from typing import IO, Any, AnyStr, Dict, Optional
 from urllib.parse import urlparse, urlunparse
 
@@ -6,10 +7,18 @@ from azure.storage.blob import upload_blob_to_url
 from scrapy.crawler import Crawler
 from scrapy.extensions.feedexport import BlockingFeedStorage
 
+logger = logging.getLogger(__name__)
+
 
 def is_sas_token_in_url(url: str) -> bool:
     """Check if the URL contains a SAS token."""
     return "?" in url
+
+
+def mask_sas_token(url: str) -> str:
+    if is_sas_token_in_url(url):
+        return urlunparse(urlparse(url)._replace(query="<SAS>"))
+    return url
 
 
 class AzureBlobFeedStorage(BlockingFeedStorage):
@@ -29,6 +38,12 @@ class AzureBlobFeedStorage(BlockingFeedStorage):
         else:
             self.credential = DefaultAzureCredential()
 
+        logger.info(
+            "Initialized AzureBlobFeedStorage; URI=%s, overwrite=%s",
+            mask_sas_token(self.uri),
+            self.should_overwrite,
+        )
+
     def _store_in_thread(self, file: IO[AnyStr]) -> None:
         file.seek(0)
         result = upload_blob_to_url(
@@ -38,7 +53,13 @@ class AzureBlobFeedStorage(BlockingFeedStorage):
             overwrite=self.should_overwrite,
         )
         file.close()
-        print(f"File uploaded to {result}")
+        logger.info(
+            "Uploaded to Azure BLOB Storage; URI=%s, etag=%s, client_request_id=%s, request_id=%s",
+            mask_sas_token(self.uri),
+            result.get("etag"),
+            result.get("client_request_id"),
+            result.get("request_id"),
+        )
 
     @classmethod
     def from_crawler(
