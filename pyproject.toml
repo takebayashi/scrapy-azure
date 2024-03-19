@@ -32,6 +32,7 @@ dependencies = [
   "mypy",
   "ruff",
   "pytest",
+  "mkdocs",
 ]
 
 [tool.hatch.envs.default.scripts]
