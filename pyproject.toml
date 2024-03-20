@@ -17,22 +17,23 @@ classifiers = [
   "Framework :: Scrapy",
 ]
 dependencies = [
-  "scrapy",
-  "azure-identity",
-  "azure-storage-blob",
+  "scrapy~=2.0",
+  "azure-identity~=1.0",
+  "azure-storage-blob~=12.0",
 ]
 
 [tool.hatch.version]
 source = "vcs"
 
 [tool.hatch.envs.default]
+python = "3.8"
 dependencies = [
-  "black",
-  "isort",
-  "mypy",
-  "ruff",
-  "pytest",
-  "mkdocs",
+  "black==24.2.0",
+  "isort==5.13.2",
+  "mypy==1.9.0",
+  "ruff==0.3.2",
+  "pytest==8.1.1",
+  "mkdocs==1.5.3",
 ]
 
 [tool.hatch.envs.default.scripts]
