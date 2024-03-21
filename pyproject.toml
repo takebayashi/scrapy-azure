@@ -50,6 +50,8 @@ python = ["3.8", "3.9", "3.10", "3.11", "3.12"]
 profile = "black"
 
 [tool.mypy]
+strict = true
+disallow_subclassing_any = false
 ignore_missing_imports = true
 
 [tool.ruff.lint]

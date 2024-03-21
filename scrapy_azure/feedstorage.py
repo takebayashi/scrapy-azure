@@ -68,5 +68,5 @@ class AzureBlobFeedStorage(BlockingFeedStorage):
         uri: str,
         *,
         feed_options: Optional[Dict[str, Any]] = None,
-    ):
+    ) -> "AzureBlobFeedStorage":
         return cls(uri, feed_options=feed_options)
