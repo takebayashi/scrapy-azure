@@ -1,5 +1,5 @@
 import logging
-from typing import Any, BinaryIO, Dict, Optional
+from typing import IO, Any, Dict, Optional
 from urllib.parse import urlparse, urlunparse
 
 from azure.identity import DefaultAzureCredential
@@ -44,7 +44,7 @@ class AzureBlobFeedStorage(BlockingFeedStorage):
             self.should_overwrite,
         )
 
-    def _store_in_thread(self, file: BinaryIO) -> None:
+    def _store_in_thread(self, file: IO[bytes]) -> None:
         file.seek(0)
         result = upload_blob_to_url(
             self.uri,
